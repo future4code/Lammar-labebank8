@@ -4,7 +4,7 @@ export const clientes:Cliente[]=[
     {
         nome: "Bruna Carvalho",
         cpf: "182.998.949-81",
-        nascimento: "26/06/1997",
+        nascimento: "1997-06-26",
         saldo: 0      
     },
     {

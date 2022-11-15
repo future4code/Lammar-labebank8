@@ -21,6 +21,10 @@ app.get("/users",(req:Request, res:Response)=>{
 app.post("/users", (req: Request, res: Response)=>{
     const {nome, cpf, nascimento,saldo} = req.body
     
+    let arrayNascimento=nascimento.split("/")
+    let anoNascimento = arrayNascimento[2]
+    let idade = 2022 - anoNascimento
+    
     if(!nome && !cpf && !nascimento && !saldo){
         return res.status(422).send("Insira todos os parâmetros necessários: Nome, CPF, Data de Nascimento e Saldo.")
     }else if (!nome){
@@ -29,6 +33,8 @@ app.post("/users", (req: Request, res: Response)=>{
         return res.status(422).send("Insira o cpf do usuário")
     }else if (!nascimento){
         return res.status(422).send("Insira o nascimento do usuário")
+    }else if(idade < 18){
+        return res.status(400).send("O usuário precisa ter mais de 18 anos para criar o cadastro.")
     }
     
     const cpfValido= clientes.find((cliente)=>{
@@ -38,7 +44,9 @@ app.post("/users", (req: Request, res: Response)=>{
     
     if(cpfValido){
         return res.status(400).send("CPF já está sendo utilizado em outra conta.")
-    }   
+    }
+    
+  
     
     let novoCliente = {
         nome, cpf, nascimento, saldo
@@ -46,7 +54,7 @@ app.post("/users", (req: Request, res: Response)=>{
     
     clientes.push(novoCliente)
     res.status(201).send(clientes)
-
+    
 
 
 
