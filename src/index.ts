@@ -19,13 +19,13 @@ app.get("/users",(req:Request, res:Response)=>{
 
 // criando um novo usuário:
 app.post("/users", (req: Request, res: Response)=>{
-    const {nome, cpf, nascimento,saldo} = req.body
+    const {nome, cpf, nascimento} = req.body
     
     let arrayNascimento=nascimento.split("/")
     let anoNascimento = arrayNascimento[2]
     let idade = 2022 - anoNascimento
     
-    if(!nome && !cpf && !nascimento && !saldo){
+    if(!nome && !cpf && !nascimento){
         return res.status(422).send("Insira todos os parâmetros necessários: Nome, CPF, Data de Nascimento e Saldo.")
     }else if (!nome){
         return res.status(422).send("Insira o nome do usuário")
@@ -46,22 +46,34 @@ app.post("/users", (req: Request, res: Response)=>{
         return res.status(400).send("CPF já está sendo utilizado em outra conta.")
     }
     
-  
     
     let novoCliente = {
-        nome, cpf, nascimento, saldo
+        nome, cpf, nascimento, saldo:0
     }
     
     clientes.push(novoCliente)
     res.status(201).send(clientes)
     
+})
 
+// Verificando o saldo.
 
+app.get('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
 
+    const cpfUsuario = req.params.cpf
+    const nomeUsuario = req.params.nome
 
+    console.log(req.params)
 
+    const pesquisarUsuario = clientes.find((user)=>{
+        return user.cpf === cpfUsuario && user.nome === nomeUsuario 
+    })
 
+    if(!pesquisarUsuario){
+        return res.status(404).send("Usuário não encontrado")
+    }
 
+    res.status(200).send({saldo: pesquisarUsuario.saldo})
 })
 
 
