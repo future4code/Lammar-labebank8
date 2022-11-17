@@ -3,6 +3,7 @@ export type Cliente={
     cpf: string
     nascimento: string
     saldo: number
+    extrato:Transacao[]
 }
 
 export type Transacao={
