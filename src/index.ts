@@ -73,6 +73,42 @@ app.get('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
     res.status(200).send({saldo: pesquisarUsuario.saldo})
 })
 
+// Adicionar saldo:
+app.put('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
+
+    let errorCode = 400
+
+    try {
+        const cpfUsuario = req.params.cpf
+        const nomeUsuario = req.params.nome
+        const {valorAdicionado} = req.body
+
+        const pesquisarUsuario = clientes.find((user)=>{
+            return user.cpf === cpfUsuario && user.nome === nomeUsuario 
+        })
+
+        if(!pesquisarUsuario){
+            errorCode = 422
+            throw new Error("Usuário não encontrado");
+        }
+
+        if (typeof valorAdicionado !== "number") {
+            errorCode = 422
+            throw new Error("O valor a ser adicionado deve ser do tipo number!");
+        }
+
+        if ( valorAdicionado <= 0) {
+            errorCode = 422
+            throw new Error("O valor a ser adicionado deve ser maior que zero!");
+        }
+
+        res.status(201).send({saldo: pesquisarUsuario.saldo += valorAdicionado})
+    
+    } catch (err: any) {
+        res.status(errorCode).send(err.message)
+    }
+})
+
 app.listen(3003, () => {
     console.log("Servidor rodando na porta http://localhost:3003");
 });
