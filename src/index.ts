@@ -11,10 +11,10 @@ app.use(cors())
 
 // listando todos os  usuário:
 app.get("/users",(req:Request, res:Response)=>{
-     clientes.map((user)=>{
+    clientes.map((user)=>{
         return user
-     })
-     res.status(200).send(clientes)
+    })
+    res.status(200).send(clientes)
 })
 
 // criando um novo usuário:
@@ -41,14 +41,12 @@ app.post("/users", (req: Request, res: Response)=>{
         return cliente.cpf === cpf
     })
     
-    
     if(cpfValido){
         return res.status(400).send("CPF já está sendo utilizado em outra conta.")
     }
     
-    
     let novoCliente = {
-        nome, cpf, nascimento, saldo:0
+        nome, cpf, nascimento, saldo:0, extrato:[]
     }
     
     clientes.push(novoCliente)
@@ -57,7 +55,6 @@ app.post("/users", (req: Request, res: Response)=>{
 })
 
 // Verificando o saldo.
-
 app.get('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
 
     const cpfUsuario = req.params.cpf
@@ -76,7 +73,7 @@ app.get('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
     res.status(200).send({saldo: pesquisarUsuario.saldo})
 })
 
-
 app.listen(3003, () => {
     console.log("Servidor rodando na porta http://localhost:3003");
 });
+
