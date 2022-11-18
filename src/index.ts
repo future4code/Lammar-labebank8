@@ -156,13 +156,6 @@ app.post("/clientes/:cpf/pagamento", (req: Request, res: Response) => {
 
         cliente.extrato.push(novaTransacao)
 
-        if(novaTransacao.valor > 0){
-            let ultimaCompra = novaTransacao.valor
-            cliente.saldo = cliente.saldo - ultimaCompra
-            console.log(ultimaCompra)
-        }
-
-
         res.status(201).send("O pagamento foi realizado com sucesso")
     } catch (error: any) {
         if (res.statusCode == 200) {
