@@ -2,6 +2,7 @@ import express, { Request, Response } from "express"
 
 import cors from 'cors'
 import { clientes } from "./data"
+import { Transacao} from "./type"
 
 const app = express()
 
@@ -108,6 +109,63 @@ app.put('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
         res.status(errorCode).send(err.message)
     }
 })
+
+
+// Realizando pagameto
+app.post("/clientes/:cpf/pagamento", (req: Request, res: Response) => {
+    
+    let errorCode = 400
+    try {
+
+        const cpf = req.params.cpf
+        const {valor, descricao} = req.body
+        let {data} = req.body
+
+        if (!data) {
+            errorCode = 400
+            throw new Error("Data passada não confere!")
+        }
+
+        const [dia, mes, ano] = data.split('/')
+        const dataPagamento = new Date(`${dia}-${mes}-${ano}`)
+
+        if (!valor || !descricao || !dataPagamento) {
+            errorCode = 400
+            throw new Error("Não foi possível realizar o pagamento, dados passado não confere!")
+        }
+
+        const clientIndex = clientes.findIndex(cliente => cliente.cpf === cpf)
+
+    
+        if (clientIndex < 0) {
+            errorCode = 404
+            throw new Error("Cliente não encontrado")
+        }
+
+        const cliente = clientes[clientIndex]
+        const novaTransacao: Transacao = {
+            valor,
+            data,
+            descricao
+        }
+
+        if (Math.abs(valor) > cliente.saldo) {
+            errorCode = 406
+            throw new Error("Seu saldo é insuficiente")
+        }
+
+        cliente.extrato.push(novaTransacao)
+
+        res.status(201).send("O pagamento foi realizado com sucesso")
+    } catch (error: any) {
+        if (res.statusCode == 200) {
+            res.status(errorCode).send(error.message)
+        } else {
+            res.status(res.statusCode).send(error.message)
+        }
+    }
+})
+
 
 app.listen(3003, () => {
     console.log("Servidor rodando na porta http://localhost:3003");
