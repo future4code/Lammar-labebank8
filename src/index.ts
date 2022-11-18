@@ -103,13 +103,12 @@ app.put('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
             throw new Error("O valor a ser adicionado deve ser maior que zero!");
         }
 
-        res.status(201).send({saldo: pesquisarUsuario.saldo += valorAdicionado})
+        res.status(200).send({saldo: pesquisarUsuario.saldo += valorAdicionado})
     
     } catch (err: any) {
         res.status(errorCode).send(err.message)
     }
 })
-
 
 // Realizando pagameto
 app.post("/clientes/:cpf/pagamento", (req: Request, res: Response) => {
@@ -173,8 +172,62 @@ app.post("/clientes/:cpf/pagamento", (req: Request, res: Response) => {
     }
 })
 
+// Transferência Interna:
+app.put('/users/transferencia', (req: Request, res: Response)=>{
+
+    let errorCode = 400
+
+    try {
+        const { nomeRemetente, cpfRemetente, nomeDestinatario, cpfDestinatario, valorTransferido } = req.body
+
+        const pesquisarRemetente = clientes.find((remetente)=>{
+            return remetente.cpf === cpfRemetente && remetente.nome === nomeRemetente
+        })
+
+        if(!pesquisarRemetente){
+            errorCode = 422
+            throw new Error("Usuário Remetente não encontrado.");
+        }
+
+        const pesquisarDestinatario = clientes.find((destinatario)=>{
+            return destinatario.cpf === cpfDestinatario && destinatario.nome === nomeDestinatario 
+        })
+
+        if(!pesquisarDestinatario){
+            errorCode = 422
+            throw new Error("Usuário Destinatario não encontrado.");
+        }
+
+        if (typeof valorTransferido !== "number") {
+            errorCode = 422
+            throw new Error("O valor a ser transferido deve ser do tipo number!");
+        }
+
+        if ( valorTransferido <= 0) {
+            errorCode = 422
+            throw new Error("O valor a ser transferido deve ser maior que zero!");
+        }
+
+        if (valorTransferido > pesquisarRemetente.saldo) {
+            errorCode = 422
+            throw new Error(
+                `Saldo Insuficiente, saldo atual de ${pesquisarRemetente.nome}: ${pesquisarRemetente.saldo}.`
+            );
+        }
+
+        const novoSaldoRemetente = pesquisarRemetente.saldo -= valorTransferido
+        const novoSaldoDestinatario = pesquisarDestinatario.saldo += valorTransferido
+
+        res.status(200).send(
+            `Tranferência concluída com sucesso. Saldo atual de ${pesquisarRemetente.nome}: ${novoSaldoRemetente}.
+            SaldoAtual de ${pesquisarDestinatario.nome}: ${novoSaldoDestinatario}.`
+        )
+    
+    } catch (err: any) {
+        res.status(errorCode).send(err.message)
+    }
+})
 
 app.listen(3003, () => {
     console.log("Servidor rodando na porta http://localhost:3003");
 });
-
