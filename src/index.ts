@@ -51,7 +51,7 @@ app.post("/users", (req: Request, res: Response)=>{
     }
     
     clientes.push(novoCliente)
-    res.status(201).send(clientes)
+    res.status(201).send("Cliente cadastrado com sucesso!")
     
 })
 
@@ -158,7 +158,6 @@ app.post("/clientes/:cpf/pagamento", (req: Request, res: Response) => {
         if(novaTransacao.valor > 0){
             let ultimaCompra = novaTransacao.valor
             cliente.saldo = cliente.saldo - ultimaCompra
-            console.log(ultimaCompra)
         }
 
 
