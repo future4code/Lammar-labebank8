@@ -61,7 +61,7 @@
 
 #
 
-### Autores:
+### Feito por:
 
 [Bruna de Carvalho](https://github.com/BrunadeCarvalho)
 
