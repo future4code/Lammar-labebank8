@@ -55,5 +55,16 @@
 <p>Função que será responsável por pegar todos os usuários existentes no banco de dados, porém ao atualizar a aplicação, os dados serão resetados (exceto os que estão inseridos no array de usuários dentro do código).</p>
 <img align="center" width="400px"src="https://user-images.githubusercontent.com/102433664/202827301-f3377df9-a134-4efc-a4f6-988fcd2885e6.png" />
 
+#
+
 ### Link da Documentação: [Labebank](https://documenter.getpostman.com/view/22530775/2s8YmSqziL)
 
+#
+
+### Autores:
+
+[Bruna de Carvalho](https://github.com/BrunadeCarvalho)
+
+[Dirlei Costa](https://github.com/Dirleisc)
+
+[H Douglas Araújo](https://github.com/HDouglasA)
