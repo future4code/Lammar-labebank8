@@ -68,3 +68,9 @@
 [Dirlei Costa](https://github.com/Dirleisc)
 
 [H Douglas Araújo](https://github.com/HDouglasA)
+
+# 
+
+# Tecnologias utilizadas: 
+  <img src="https://skillicons.dev/icons?i=ts,&perline=10" />
+
