@@ -71,6 +71,6 @@
 
 # 
 
-<h3> Tecnologias utilizadas: </h3>
+<h3> Tecnologia utilizada: </h3>
 <img src="https://skillicons.dev/icons?i=ts,&perline=8" />
 
