@@ -61,12 +61,12 @@ app.get('/saldo/:cpf/:nome', (req: Request, res: Response)=>{
     const cpfUsuario = req.params.cpf
     const nomeUsuario = req.params.nome
 
-    console.log(req.params)
-
     const pesquisarUsuario = clientes.find((user)=>{
         return user.cpf === cpfUsuario && user.nome === nomeUsuario 
     })
 
+
+   
     if(!pesquisarUsuario){
         return res.status(404).send("Usuário não encontrado")
     }
